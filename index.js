@@ -1,5 +1,12 @@
 /**
+ * Recursively calculate the weighted average of a array of objects, called nodes
+ * Nodes always have a "weight" property, used for the weighted average calculation
+ * Nodes either have a "score" property, if they are a terminal node,
+ * or they have an "ingredients" property, if they are a parent node.
  * 
+ * Also exposed are the helper functions, normalizeWeights and flattenTree,
+ * in case you want (as I do) to flatten the tree
+ * and have the weights all be comparable.
  */
 
 /**
@@ -33,7 +40,10 @@ export function normalizeWeights(tree) {
 }
 
 /**
- * Takes a tree with normalized weights and flattens it
+ * Takes a tree with normalized weights and flattens it.
+ * @note This is not just flattening an array of objects.
+ * Because the weights of child nodes need to be re-weighted
+ * based on their parent's weight.
  * @param {Array<Node>} tree
  * @prop {Object} tree.node
  * @prop {Number} tree.node.weight Non-normalized weight
