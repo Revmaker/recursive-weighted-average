@@ -1,0 +1,19 @@
+{
+  "name": "recursive-weighted-average",
+  "version": "0.0.1",
+  "description": "Recursively calculate the weighted average (WA) of a array of objects",
+  "main": "recursiveWeightedAverage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samhavens/recursive-weighted-average.git"
+  },
+  "author": "Sam Havens",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samhavens/recursive-weighted-average/issues"
+  },
+  "homepage": "https://github.com/samhavens/recursive-weighted-average#readme"
+}
