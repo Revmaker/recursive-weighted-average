@@ -5,7 +5,7 @@
   "main": "index.js",
   "files": [
     "index.js"
-   ],
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/samhavens/recursive-weighted-average/issues"
   },
-  "homepage": "https://github.com/samhavens/recursive-weighted-average#readme"
+  "homepage": "https://github.com/samhavens/recursive-weighted-average#readme",
+  "devDependencies": {
+    "eslint": "^4.7.2"
+  }
 }
