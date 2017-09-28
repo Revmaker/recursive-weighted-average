@@ -7,6 +7,8 @@
     "index.js"
   ],
   "scripts": {
+    "preversion": "npm test",
+    "postversion": "git push",
     "test": "eslint index.js && node test/index.js"
   },
   "repository": {
