@@ -122,3 +122,13 @@ The defaults are set to:
     }
   };
 ```
+
+## Development
+
+Fairly standard Node setup: eslint, prettier... simple tests
+
+To update the NPM package:
+
+1. make changes
+1. stage and commit changes
+1. run `npm version patch` (or `minor` or `major`) - this will run tests, bump the version, and push the changes to GitHub
