@@ -1,5 +1,5 @@
 {
-  "name": "recursive-weighted-average",
+  "name": "@carlabs/recursive-weighted-average",
   "version": "0.0.1",
   "description": "Recursively calculate the weighted average (WA) of a array of objects",
   "main": "index.js",
