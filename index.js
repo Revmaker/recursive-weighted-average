@@ -26,7 +26,8 @@ const defaultConfig = {
 /**
  * Change a tree with unbounded weights to one with normalized weights
  * eg, in [0,1]
- * Parent nodes weights will be ignored, so are meaningless after this application
+ * After applying this to a tree, all leaf node weights will sum to 1
+ * This allows for direct comparison of weight across heights of the tree
  * @param {Array<Node>} tree
  * @prop {Object} tree.node
  * @prop {Number} tree.node.weight Non-normalized weight
@@ -45,13 +46,17 @@ const normalizeWeights = (tree, parentWeight = 1, config = defaultConfig) => {
   return tree
     .map(node =>
       Object.assign({}, node, {
-        [config.node.weight]: (node[config.node.weight] / weightSum) * parentWeight,
+        [config.node.weight]:
+          node[config.node.weight] / weightSum * parentWeight,
       })
     )
     .map(node => {
       if (Array.isArray(node[config.node.children])) {
         return Object.assign({}, node, {
-          [config.node.children]: normalizeWeights(node[config.node.children], node[config.node.weight]),
+          [config.node.children]: normalizeWeights(
+            node[config.node.children],
+            node[config.node.weight]
+          ),
         });
       }
       return node;
@@ -59,13 +64,7 @@ const normalizeWeights = (tree, parentWeight = 1, config = defaultConfig) => {
 };
 
 /**
- * THIS FUNCTION IS WIP
- * Takes a tree with normalized weights and flattens it.
- * @note This is not just flattening an array of objects.
- * Because the weights of child nodes need to be re-weighted
- * based on their parent's weight.
- * @note THIS WILL PRODUCE NONSENSICAL OUTPUT IF WEIGHTS ARE > 1
- * so you should probably call normalizeWeights first
+ * Flattens a tree by bringing all leaf nodes to the top
  * @param {Array<Node>} tree
  * @prop {Object} tree.node
  * @prop {Number} tree.node.weight Non-normalized weight
