@@ -108,6 +108,9 @@ Currently, you can configure the names of the fields: weight, scores, children, 
       getScore: x => x,
     },
   };
+
+  // functions accept a second parameter for the config object
+  const treeWithNormalizedWeights = rwa.normalizeWeights(tree, myConfig);
 ```
 
 The defaults are set to:
