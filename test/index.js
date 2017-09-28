@@ -3,18 +3,23 @@ const assert = require('assert');
 const {
   normalizeWeights,
   flattenTree,
-  recursiveWeightedAverage,
 } = require('../index');
-const { tree, treeWithNormalizedWeights, simpleTree } = require('./data/examples');
+const { tree, normalizedTree, normalizedFlatenedTree, simpleTree, normalizedSimpleTree } = require('./data/examples');
 
-/**
- * @todo make example data simpler
- */
+assert.deepStrictEqual(
+  normalizeWeights(simpleTree),
+  normalizedSimpleTree,
+  'normalizeWeights test failed with simple example data'
+);
 
 assert.deepStrictEqual(
   normalizeWeights(tree),
-  treeWithNormalizedWeights,
+  normalizedTree,
   'normalizeWeights test failed with example data'
 );
 
-
+assert.deepStrictEqual(
+  flattenTree(normalizedTree),
+  normalizedFlatenedTree,
+  'flattenTree test failed with example data'
+);
