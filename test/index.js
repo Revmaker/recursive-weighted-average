@@ -1,25 +1,47 @@
 const assert = require('assert');
+const util = require('util');
 
+const { normalizeWeights, flattenTree } = require('../index');
 const {
-  normalizeWeights,
-  flattenTree,
-} = require('../index');
-const { tree, normalizedTree, normalizedFlatenedTree, simpleTree, normalizedSimpleTree } = require('./data/examples');
+  tree,
+  normalizedTree,
+  normalizedFlatenedTree,
+  simpleTree,
+  normalizedSimpleTree,
+} = require('./data/examples');
 
-assert.deepStrictEqual(
+const inspect = x => util.inspect(x, false, null);
+
+const assertWithMessage = (actual, expected, testName, dataName) => {
+  assert.deepStrictEqual(
+    actual,
+    expected,
+    `${testName} test failed with ${dataName} data,
+  expected: ${inspect(expected)}
+  
+  
+  got: ${inspect(actual)}
+  `
+  );
+};
+
+assertWithMessage(
   normalizeWeights(simpleTree),
   normalizedSimpleTree,
-  'normalizeWeights test failed with simple example data'
+  'normalizeWeights',
+  'simple example'
 );
 
-assert.deepStrictEqual(
+assertWithMessage(
   normalizeWeights(tree),
   normalizedTree,
-  'normalizeWeights test failed with example data'
+  'normalizeWeights',
+  'example'
 );
 
-assert.deepStrictEqual(
+assertWithMessage(
   flattenTree(normalizedTree),
   normalizedFlatenedTree,
-  'flattenTree test failed with example data'
+  'flattenTree',
+  'example'
 );
