@@ -1,6 +1,6 @@
 {
   "name": "@carlabs/recursive-weighted-average",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Recursively calculate the weighted average (WA) of a array of objects",
   "main": "index.js",
   "files": [
@@ -11,12 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/samhavens/recursive-weighted-average.git"
+    "url": "git+https://github.com/revmaker/recursive-weighted-average.git"
   },
   "author": "Sam Havens <samhavens@gmail.com> (http://www.samuelhavens.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/samhavens/recursive-weighted-average/issues"
+    "url": "https://github.com/revmaker/recursive-weighted-average/issues"
   },
   "homepage": "https://github.com/samhavens/recursive-weighted-average#readme",
   "devDependencies": {
