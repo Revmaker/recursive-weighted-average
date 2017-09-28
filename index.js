@@ -9,17 +9,24 @@
  * and have the weights all be comparable.
  */
 
- // This is to account for strucures with differently named properties
+/**
+ * This is to account for strucures with differently named properties
+ * and structures.
+ * If score is not an int, need to update getScore function
+ */
 const defaultConfig = {
   node: {
-    weight: "weight",
-    score: "trim_scores",
-    children: "ingredients",
+    weight: 'weight',
+    score: 'trim_scores',
+    children: 'ingredients',
+    getScore: x => x,
   }
 };
 
 /**
  * Change a tree with unbounded weights to one with normalized weights
+ * eg, in [0,1]
+ * Parent nodes weights will be ignored, so are meaningless after this application
  * @param {Array<Node>} tree
  * @prop {Object} tree.node
  * @prop {Number} tree.node.weight Non-normalized weight
@@ -28,33 +35,31 @@ const defaultConfig = {
  * it has children - another tree
  * @return {Array<Node>} a tree with normalized weights
  */
-const normalizeWeights = (tree, config = defaultConfig) => {
-  const normalizeRow = row => {
-    // Find sum of all weights
-    const weightSum = row
-      .map(node => node[config.node.weight])
-      .reduce((a, b) => a + b, 0);
-    // divide each weight by the sum of all weights to get weights between 0-1
-    // recursively call if the node has children
-    return row
-      .map(node =>
-        Object.assign({}, node, {
-          [config.node.weight]: node[config.node.weight] / weightSum,
-        })
-      )
-      .map(node => {
-        if (Array.isArray(node[config.node.children])) {
-          return Object.assign({}, node, {
-            [config.node.children]: normalizeWeights(node[config.node.children]),
-          })
-        }
-        return node;
-      });
-  };
-  return normalizeRow(tree);
+const normalizeWeights = (tree, parentWeight = 1, config = defaultConfig) => {
+  // Find sum of all weights
+  const weightSum = tree
+    .map(node => node[config.node.weight])
+    .reduce((a, b) => a + b, 0);
+  // divide each weight by the sum of all weights to get weights between 0-1
+  // recursively call if the node has children
+  return tree
+    .map(node =>
+      Object.assign({}, node, {
+        [config.node.weight]: (node[config.node.weight] / weightSum) * parentWeight,
+      })
+    )
+    .map(node => {
+      if (Array.isArray(node[config.node.children])) {
+        return Object.assign({}, node, {
+          [config.node.children]: normalizeWeights(node[config.node.children], node[config.node.weight]),
+        });
+      }
+      return node;
+    });
 };
 
 /**
+ * THIS FUNCTION IS WIP
  * Takes a tree with normalized weights and flattens it.
  * @note This is not just flattening an array of objects.
  * Because the weights of child nodes need to be re-weighted
@@ -69,35 +74,23 @@ const normalizeWeights = (tree, config = defaultConfig) => {
  * @return {Array<Node>} a flattened tree with normalized weights
  */
 const flattenTree = (tree, config = defaultConfig) => {
-  const flattenParentNode = node => {
-    const bringUp = child => {
-      if (Array.isArray(child[config.node.children])) {
-        return flattenParentNode(child);
-      }
-      return Object.assign({}, node, {
-        [config.node.weight]:
-          node[config.node.weight] * child[config.node.weight],
-      });
-    };
-    return node
-      .map(bringUp)
-      .reduce((a, b) => a.concat(b), []);
-  };
-  // handleNode and flattenParentNode seem redundant, but the idea is
-  // to handle parent and child nodes differently
-  const handleNode = nod => {
-    const [node, ...tail] = nod;
-    if (Array.isArray(nod[config.node.children])) {
-      return flattenParentNode(nod);
+  const flatten = (nodes = [], acc = []) => {
+    if (nodes.length === 0) {
+      return acc;
     }
-    return nod;
+    const [ head, ...tail ] = nodes;
+    if (Array.isArray(head[config.node.children])) {
+      return flatten(tail.concat(head[config.node.children]), acc);
+    }
+    return flatten(tail, acc.concat([head]));
   };
-  return handleNode(tree);
+  return flatten(tree, []);
 };
 
 /**
  * Computes the weighted average of a tree of nodes
  * each node has a weight, and either a score, or another tree
+ * @todo MAKE THIS WORK FOR NON-NUMERIC (STRUCTURED) SCORES
  * @param {Array} tree The tree described above
  * @prop {Number} tree.node.weight Non-normalized weight
  * @prop {Number?} tree.node.score If node is not a parent, it has a score
@@ -105,8 +98,8 @@ const flattenTree = (tree, config = defaultConfig) => {
  */
 const recursiveWeightedAverage = (tree, config = defaultConfig) => {
   return flattenTree(normalizeWeights(tree)).reduce(
-    (acc, val) => acc + (val[config.node.score] * val[config.node.weight]),
-    0,
+    (acc, val) => acc + (config.node.getScore(val[config.node.score]) * val[config.node.weight]),
+    0
   );
 };
 
