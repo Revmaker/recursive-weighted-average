@@ -1,5 +1,7 @@
 # Recursive Weighted Average
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Revmaker/recursive-weighted-average.svg)](https://greenkeeper.io/)
+
 A package for computing the weighted average of all leaf nodes of a tree with the following shape:
 
 ```sh
